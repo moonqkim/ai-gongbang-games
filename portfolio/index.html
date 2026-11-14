@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>권예담 #07</title>
+<meta name="description" content="개발자 권예담의 포트폴리오" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@500;700&family=Yellowtail&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --night: #07140f;
+    --field: #0d3b2a;
+    --field-2: #12503a;
+    --grass-a: #145c41;
+    --grass-b: #11523a;
+    --chalk: #f6f1e4;
+    --cream: #efe6cf;
+    --dirt: #c7703b;
+    --dirt-2: #a85a2c;
+    --stitch: #d6312b;
+    --navy: #13213b;
+    --led: #ffb627;
+    --muted: rgba(246,241,228,.66);
+    --line: rgba(246,241,228,.14);
+    --sans: "Pretendard Variable", Pretendard, system-ui, sans-serif;
+    --display: "Bebas Neue", "Pretendard Variable", sans-serif;
+    --script: "Yellowtail", cursive;
+    --mono: "JetBrains Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--night); color: var(--chalk); font-family: var(--sans);
+    line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--led); color: var(--night); }
+  .wrap { width: min(1180px, 100% - 48px); margin-inline: auto; position: relative; }
+
+  /* ── 잔디 줄무늬 배경 ── */
+  .mow {
+    background:
+      repeating-linear-gradient(90deg, var(--grass-a) 0 90px, var(--grass-b) 90px 180px);
+  }
+
+  /* ── NAV : 전광판 띠 ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 24px; background: rgba(7,20,15,.82);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .brand { display: flex; align-items: center; gap: 12px; font-family: var(--display); font-size: 24px; letter-spacing: .04em; }
+  nav .brand .ball-mini { width: 28px; height: 28px; display: block; }
+  nav .menu { display: flex; gap: 4px; }
+  nav .menu a {
+    font-family: var(--display); font-size: 19px; letter-spacing: .06em; padding: 6px 14px;
+    border-radius: 6px; color: var(--muted); transition: .2s;
+  }
+  nav .menu a:hover, nav .menu a.active { color: var(--night); background: var(--led); }
+  nav .count { font-family: var(--mono); font-size: 13px; color: var(--led); display: flex; gap: 14px; }
+  nav .count b { color: var(--chalk); font-weight: 500; }
+  .dots i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; border: 1px solid var(--led); margin-left: 3px; }
+  .dots i.on { background: var(--led); }
+
+  /* ── HERO : 야간 경기장 ── */
+  .hero {
+    min-height: 100svh; position: relative; overflow: hidden;
+    display: flex; align-items: center; padding: 120px 0 80px;
+    background:
+      radial-gradient(ellipse 60% 40% at 15% -5%, rgba(255,246,214,.28), transparent 60%),
+      radial-gradient(ellipse 60% 40% at 85% -5%, rgba(255,246,214,.28), transparent 60%),
+      linear-gradient(180deg, #050d0a 0%, #0a2219 45%, var(--field) 100%);
+  }
+  .hero::after { /* 아래쪽 잔디 */
+    content: ""; position: absolute; left: -10%; right: -10%; bottom: -1px; height: 34%;
+    background: repeating-linear-gradient(90deg, var(--grass-a) 0 90px, var(--grass-b) 90px 180px);
+    transform: perspective(600px) rotateX(55deg); transform-origin: bottom;
+    mask-image: linear-gradient(to top, #000 40%, transparent);
+  }
+  .lights { position: absolute; top: 40px; display: grid; grid-template-columns: repeat(4, 10px); gap: 6px; opacity: .9; }
+  .lights i { width: 10px; height: 10px; border-radius: 50%; background: #fff8dc; box-shadow: 0 0 14px 4px rgba(255,248,220,.55); animation: flick 4s infinite; }
+  .lights i:nth-child(3n) { animation-delay: .7s; }
+  .lights.l { left: 8%; } .lights.r { right: 8%; }
+  @keyframes flick { 0%,100% { opacity: 1; } 92% { opacity: 1; } 94% { opacity: .55; } 96% { opacity: 1; } }
+
+  .hero-grid { display: grid; grid-template-columns: 1.25fr 1fr; gap: 48px; align-items: center; position: relative; z-index: 2; }
+  .tagline { font-family: var(--mono); color: var(--led); font-size: 14px; letter-spacing: .12em; margin-bottom: 18px; display: flex; align-items: center; gap: 10px; }
+  .tagline::before { content: ""; width: 34px; height: 2px; background: var(--led); }
+  .hero h1 { font-family: var(--display); font-weight: 400; line-height: .86; font-size: clamp(76px, 12vw, 176px); letter-spacing: .01em; }
+  .hero h1 .ko { font-family: var(--sans); font-weight: 900; letter-spacing: -.05em; font-size: 1em; display: block; }
+  .hero h1 .script {
+    font-family: var(--script); color: var(--stitch); font-size: .5em; letter-spacing: 0; display: inline-block;
+    transform: rotate(-8deg) translateY(-.15em); text-shadow: 3px 3px 0 var(--chalk);
+  }
+  .hero p.lead { margin-top: 30px; max-width: 520px; font-size: 19px; color: var(--muted); }
+  .hero p.lead b { color: var(--chalk); }
+  .cta { display: flex; gap: 12px; margin-top: 36px; flex-wrap: wrap; }
+  .btn {
+    display: inline-flex; align-items: center; gap: 10px; padding: 14px 24px; border-radius: 10px;
+    font-family: var(--display); font-size: 22px; letter-spacing: .06em; border: 2px solid var(--chalk);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn.primary { background: var(--chalk); color: var(--navy); box-shadow: 5px 5px 0 var(--stitch); }
+  .btn:hover { transform: translate(-2px,-2px); box-shadow: 7px 7px 0 var(--stitch); }
+
+  /* 공던지기 */
+  .pitch-area { margin-top: 22px; display: grid; gap: 16px; width: fit-content; max-width: 100%; }
+  .pitch-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn.pitch {
+    background: var(--led); color: var(--navy); border-color: var(--led); cursor: pointer;
+    box-shadow: 5px 5px 0 var(--chalk);
+  }
+  .btn.pitch:hover { box-shadow: 7px 7px 0 var(--chalk); }
+  .btn.pitch:disabled { opacity: .55; cursor: wait; transform: none; box-shadow: 5px 5px 0 var(--chalk); }
+  .mini-board {
+    background: #050806; border: 4px solid #1a2a22; border-radius: 14px; padding: 12px 14px;
+    box-shadow: 0 0 0 1px #000, 0 18px 40px rgba(0,0,0,.45); font-family: var(--mono); max-width: 100%;
+  }
+  .mb-scroll { overflow-x: auto; }
+  .mini-board table { border-collapse: collapse; font-size: 14px; width: 100%; }
+  .mini-board th { color: var(--muted); font-weight: 500; font-size: 11px; padding: 2px 7px; text-align: center; }
+  .mini-board td { color: var(--led); font-weight: 700; text-align: center; padding: 5px 7px; min-width: 24px;
+    border-top: 1px solid #142019; text-shadow: 0 0 8px rgba(255,182,39,.55); }
+  .mini-board td.team { text-align: left; color: var(--chalk); font-family: var(--sans); font-weight: 800; font-size: 14px; letter-spacing: -.02em; text-shadow: none; padding-right: 12px; }
+  .mini-board td.empty { color: #3a2d10; text-shadow: none; }
+  .mini-board td.now { background: rgba(255,182,39,.14); border-radius: 4px; }
+  .mini-board .tot { color: #fff; text-shadow: none; }
+  .mini-board th.tot { color: var(--chalk); }
+  .mini-board td.tot:first-of-type, .mini-board .sep { border-left: 2px solid #1a2a22; }
+  .mini-board td.pop { animation: pop .6s ease; }
+  @keyframes pop { 40% { transform: scale(1.6); color: #fff; } }
+  .mb-bottom { display: flex; align-items: center; gap: 18px; margin-top: 10px; padding-top: 10px; border-top: 1px solid #142019; flex-wrap: wrap; }
+  .bases { position: relative; width: 44px; height: 30px; }
+  .bases i { position: absolute; width: 12px; height: 12px; border: 2px solid var(--led); transform: rotate(45deg); }
+  .bases i[data-b="0"] { right: 3px; bottom: 3px; }
+  .bases i[data-b="1"] { left: 16px; top: 0; }
+  .bases i[data-b="2"] { left: 3px; bottom: 3px; }
+  .bases i.on { background: var(--led); box-shadow: 0 0 8px rgba(255,182,39,.7); }
+  .mb-count { display: flex; gap: 12px; font-size: 12px; color: var(--led); }
+  .pb-row { display: flex; align-items: center; gap: 3px; }
+  .mb-info { display: grid; font-size: 12px; }
+  .mb-info .inn-label { color: var(--chalk); font-weight: 500; }
+  .mb-info small { color: var(--muted); font-size: 11px; }
+  .btn.swing { background: var(--stitch); color: var(--chalk); border-color: var(--stitch); cursor: pointer; box-shadow: 5px 5px 0 var(--navy); }
+  .btn.swing:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+  .btn.swing kbd { font-family: var(--mono); font-size: 11px; padding: 2px 6px; border: 1px solid rgba(246,241,228,.5); border-radius: 4px; }
+  .btn.swing.swung { animation: batSwing .35s cubic-bezier(.2,.8,.2,1); }
+  @keyframes batSwing { 0% { transform: rotate(0); } 40% { transform: rotate(-14deg) scale(1.08); } 100% { transform: rotate(0); } }
+  .timing-ring {
+    position: fixed; left: 0; top: 0; z-index: 79; width: 46px; height: 46px; margin: -23px 0 0 -23px;
+    border: 3px solid var(--led); border-radius: 50%; pointer-events: none; box-shadow: 0 0 16px rgba(255,182,39,.6);
+  }
+  .flying-ball {
+    position: fixed; left: 0; top: 0; z-index: 80; width: 46px; height: 46px; margin: -23px 0 0 -23px; pointer-events: none;
+    border-radius: 50%; box-shadow: 0 10px 24px rgba(0,0,0,.45);
+  }
+  .flying-ball svg, .ball-art svg { display: block; width: 100%; height: 100%; }
+  .call {
+    position: fixed; left: 50%; top: 45%; z-index: 90; pointer-events: none; text-align: center;
+    font-family: var(--sans); font-weight: 900; letter-spacing: -.05em; line-height: 1;
+    font-size: clamp(56px, 11vw, 140px); color: var(--chalk);
+    text-shadow: 5px 5px 0 var(--stitch), 0 0 40px rgba(0,0,0,.6);
+    transform: translate(-50%, -50%) scale(.4); opacity: 0;
+  }
+  .call small { display: block; font-size: .28em; letter-spacing: 0; margin-top: 14px; color: var(--led); text-shadow: 0 2px 10px rgba(0,0,0,.8); }
+  .call.show { animation: callPop 1.5s cubic-bezier(.2,.8,.2,1) forwards; }
+  .call.big { color: var(--led); text-shadow: 6px 6px 0 var(--navy), 0 0 50px rgba(255,182,39,.6); }
+  @keyframes callPop {
+    0% { opacity: 0; transform: translate(-50%, -50%) scale(.4) rotate(-6deg); }
+    18% { opacity: 1; transform: translate(-50%, -50%) scale(1.08) rotate(-3deg); }
+    30% { transform: translate(-50%, -50%) scale(1) rotate(-3deg); }
+    80% { opacity: 1; }
+    100% { opacity: 0; transform: translate(-50%, -60%) scale(1) rotate(-3deg); }
+  }
+
+  /* 야구공 */
+  .ball-stage { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1; }
+  .ball {
+    width: min(420px, 80%); aspect-ratio: 1; border-radius: 50%; position: relative;
+    box-shadow: 0 40px 80px rgba(0,0,0,.55), 0 0 60px rgba(255,248,220,.08);
+    animation: float 6s ease-in-out infinite;
+  }
+  .ball .ball-art { position: absolute; inset: 0; }
+  .ball-art .spin { transform-origin: 100px 100px; animation: spin 26s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes float { 50% { transform: translateY(-16px); } }
+  .ball-shadow { position: absolute; bottom: 2%; width: 50%; height: 26px; border-radius: 50%; background: rgba(0,0,0,.45); filter: blur(12px); animation: shadow 6s ease-in-out infinite; }
+  @keyframes shadow { 50% { transform: scale(.8); opacity: .6; } }
+  .speed {
+    position: absolute; top: 8%; right: 0; background: var(--navy); border: 2px solid var(--led);
+    border-radius: 10px; padding: 10px 16px; font-family: var(--mono); text-align: center; transform: rotate(4deg);
+    box-shadow: 0 0 24px rgba(255,182,39,.25);
+  }
+  .speed small { display: block; font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+  .speed b { font-size: 34px; color: var(--led); text-shadow: 0 0 12px rgba(255,182,39,.7); }
+  .speed span { font-size: 13px; color: var(--led); }
+
+  /* ── 공통 섹션 ── */
+  section { padding: 130px 0; position: relative; }
+  .sec-head { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 56px; flex-wrap: wrap; }
+  .inning { font-family: var(--mono); color: var(--led); font-size: 14px; letter-spacing: .12em; }
+  h2 { font-family: var(--display); font-weight: 400; font-size: clamp(56px, 8vw, 112px); line-height: .9; letter-spacing: .01em; }
+  h2 .ko { font-family: var(--sans); font-weight: 900; letter-spacing: -.05em; font-size: .62em; display: block; margin-top: 8px; color: var(--muted); }
+  .stitch-line { height: 18px; background:
+    repeating-linear-gradient(90deg, transparent 0 10px, var(--stitch) 10px 22px) center/100% 3px no-repeat;
+    position: relative; opacity: .9; }
+  .stitch-line::before, .stitch-line::after {
+    content: ""; position: absolute; left: 0; right: 0; height: 8px;
+    background: repeating-linear-gradient(115deg, transparent 0 14px, var(--stitch) 14px 17px, transparent 17px 22px);
+  }
+  .stitch-line::before { top: 0; } .stitch-line::after { bottom: 0; transform: scaleY(-1); }
+
+  /* ── 선수 카드 (ABOUT) ── */
+  #about { background: var(--cream); color: var(--navy); }
+  #about .inning { color: var(--stitch); }
+  #about h2 .ko { color: rgba(19,33,59,.6); }
+  .about-grid { display: grid; grid-template-columns: 380px 1fr; gap: 56px; align-items: start; }
+
+  .card-flip { perspective: 1400px; }
+  .card-inner { position: relative; aspect-ratio: 5/7; transition: transform .9s cubic-bezier(.2,.8,.2,1); transform-style: preserve-3d; }
+  .card-flip:hover .card-inner, .card-flip.flipped .card-inner { transform: rotateY(180deg); }
+  .face {
+    position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 18px; padding: 14px; box-shadow: 0 30px 60px rgba(19,33,59,.3);
+  }
+  .front { background: linear-gradient(160deg, #fff 0%, #f4ecd8 100%); border: 1px solid #d9cba8; }
+  .front .photo {
+    height: 74%; border-radius: 10px; position: relative; overflow: hidden;
+    background: radial-gradient(circle at 50% 30%, #2a6b4f, var(--field) 70%);
+    display: grid; place-items: center;
+  }
+  .front .photo .num { font-family: var(--display); font-size: 220px; line-height: 1; color: rgba(246,241,228,.12); position: absolute; right: -10px; bottom: -30px; }
+  .front .photo .initial { font-family: var(--script); font-size: 110px; color: var(--chalk); transform: rotate(-8deg); text-shadow: 4px 4px 0 var(--stitch); position: relative; }
+  .front .photo .team { position: absolute; top: 12px; left: 14px; font-family: var(--display); font-size: 20px; letter-spacing: .1em; color: var(--led); }
+  .front .plate { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; padding: 0 6px; }
+  .front .plate b { font-family: var(--sans); font-weight: 900; font-size: 30px; letter-spacing: -.04em; display: block; line-height: 1.1; }
+  .front .plate small { font-family: var(--mono); font-size: 12px; color: #6b6450; }
+  .back { transform: rotateY(180deg); background: var(--navy); color: var(--chalk); padding: 26px; display: flex; flex-direction: column; }
+  .back h4 { font-family: var(--display); font-size: 30px; letter-spacing: .06em; color: var(--led); }
+  .back p { font-size: 14px; color: var(--muted); margin: 8px 0 18px; }
+  .back table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; }
+  .back th { color: var(--led); font-weight: 500; text-align: left; padding: 6px 4px; border-bottom: 1px solid var(--line); }
+  .back td { padding: 7px 4px; border-bottom: 1px dashed var(--line); }
+  .back .profile th { width: 40%; padding: 8px 4px; border-bottom: 1px dashed var(--line); font-family: var(--sans); font-weight: 600; }
+  .back .profile td { padding: 8px 4px; font-family: var(--sans); font-size: 15px; font-weight: 700; color: var(--chalk); }
+  .back .hint { font-family: var(--sans); font-size: 14px; color: var(--led); }
+  .back .hint { margin-top: auto; font-size: 12px; color: var(--muted); font-family: var(--mono); }
+  .flip-hint { text-align: center; margin-top: 16px; font-family: var(--mono); font-size: 12px; color: #6b6450; }
+
+  .scout p.big { font-size: 26px; line-height: 1.55; letter-spacing: -.02em; font-weight: 600; }
+  .scout p.big mark { background: linear-gradient(transparent 60%, rgba(214,49,43,.25) 60%); color: inherit; }
+  .scout-report { margin-top: 36px; border: 2px solid var(--navy); border-radius: 14px; overflow: hidden; }
+  .scout-report header { background: var(--navy); color: var(--chalk); padding: 12px 20px; font-family: var(--sans); font-weight: 800; font-size: 19px; letter-spacing: -.02em; display: flex; justify-content: space-between; }
+  .scout-report header span { color: var(--led); font-family: var(--mono); font-size: 13px; letter-spacing: 0; align-self: center; }
+  .tool { display: grid; grid-template-columns: 26px 120px 1fr 64px; gap: 16px; align-items: center; padding: 14px 20px; border-top: 1px solid rgba(19,33,59,.12); }
+  .tool span { font-weight: 700; font-size: 15px; }
+  .tool em { font-style: normal; font-family: var(--display); font-size: 24px; color: var(--navy); opacity: .45; text-align: center; }
+  .tool:first-of-type em { opacity: 1; color: var(--stitch); }
+  .tool .bar { height: 12px; border-radius: 6px; background: rgba(19,33,59,.1); overflow: hidden; }
+  .tool .bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--field-2), var(--dirt)); border-radius: 6px; transition: width 1.4s cubic-bezier(.2,.8,.2,1); }
+  .tool b { font-family: var(--display); font-size: 26px; text-align: right; color: var(--stitch); }
+
+  /* ── 수비 위치 (SKILLS) ── */
+  #lineup { background: var(--field); }
+  .diamond-wrap { display: grid; grid-template-columns: 1.7fr 1fr; gap: 32px; align-items: center; }
+  .field-svg { width: 100%; height: auto; display: block; }
+  .field-svg .pos-dot { cursor: pointer; transition: transform .2s; transform-box: fill-box; transform-origin: center; }
+  .field-svg .pos-dot:hover, .field-svg .pos-dot.on { transform: scale(1.18); }
+  .field-svg .pos-dot.on circle { fill: var(--led); }
+  .field-svg .pos-dot.on text { fill: var(--navy); }
+  .lineup { list-style: none; border-top: 1px solid var(--line); }
+  .lineup li {
+    display: grid; grid-template-columns: 40px 64px 1fr auto; gap: 14px; align-items: center;
+    padding: 16px 8px; border-bottom: 1px solid var(--line); cursor: pointer; transition: background .2s, padding .2s;
+  }
+  .lineup li:hover, .lineup li.on { background: rgba(255,182,39,.1); padding-left: 16px; }
+  .lineup .order { font-family: var(--display); font-size: 30px; color: var(--led); }
+  .lineup .p { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+  .lineup .name { font-weight: 700; font-size: 19px; }
+  .lineup .name small { display: block; font-weight: 400; font-size: 13px; color: var(--muted); }
+  .lineup .avg { font-family: var(--mono); font-size: 15px; color: var(--chalk); }
+  .lineup li { min-height: 64px; }
+  .ground { position: relative; }
+  /* GIF(860×599) 중 게임 화면 부분(가로 160~722, 세로 0~490)만 잘라서 칸에 꽉 채운다 */
+  .ground .preview-box {
+    position: absolute; inset: 0; overflow: hidden;
+    border-radius: 14px; background: var(--field); box-shadow: 0 12px 32px rgba(0,0,0,.35);
+  }
+  .ground .preview {
+    position: absolute; width: 153%; max-width: none; left: -28.5%;
+    top: 50%; transform: translateY(-40.9%);
+  }
+  .lineup .go {
+    display: inline-block; padding: 8px 14px; border-radius: 999px;
+    background: var(--led); color: var(--navy); font-weight: 700; font-size: 14px;
+    text-decoration: none; white-space: nowrap; transition: transform .15s;
+  }
+  .lineup .go:hover { transform: scale(1.06); }
+
+  /* 등장 효과 */
+  .reveal { opacity: 0; transform: translateY(36px); transition: opacity .9s cubic-bezier(.2,.8,.2,1), transform .9s cubic-bezier(.2,.8,.2,1); }
+  .reveal.in { opacity: 1; transform: none; }
+
+  @media (max-width: 960px) {
+    nav .count { display: none; }
+    nav .menu a { font-size: 16px; padding: 6px 8px; }
+    .hero-grid, .about-grid, .diamond-wrap { grid-template-columns: 1fr; }
+    .ball-stage { max-width: 360px; margin: 0 auto; }
+    .field-svg { max-width: 460px; margin: 0 auto; }
+    .card-flip { max-width: 360px; margin: 0 auto; }
+    .tool { grid-template-columns: 20px 96px 1fr 54px; gap: 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <!-- 야구공 재질 -->
+    <radialGradient id="bLeather" cx="38%" cy="32%" r="75%">
+      <stop offset="0" stop-color="#fffefa"/>
+      <stop offset=".45" stop-color="#f6f0e2"/>
+      <stop offset=".78" stop-color="#e4d8bd"/>
+      <stop offset="1" stop-color="#c3b291"/>
+    </radialGradient>
+    <radialGradient id="bShade" cx="34%" cy="28%" r="80%">
+      <stop offset=".55" stop-color="#3b2a12" stop-opacity="0"/>
+      <stop offset=".85" stop-color="#3b2a12" stop-opacity=".22"/>
+      <stop offset="1" stop-color="#2a1d0b" stop-opacity=".5"/>
+    </radialGradient>
+    <radialGradient id="bRim" cx="72%" cy="78%" r="40%">
+      <stop offset=".6" stop-color="#fff6dc" stop-opacity="0"/>
+      <stop offset=".95" stop-color="#fff6dc" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#fff6dc" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="bSpec" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#fff" stop-opacity=".95"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bThread" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ef4a3f"/>
+      <stop offset="1" stop-color="#b3221d"/>
+    </linearGradient>
+    <filter id="bGrain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="1.6" numOctaves="2" seed="7"/>
+      <feColorMatrix values="0 0 0 0 .35  0 0 0 0 .27  0 0 0 0 .15  0 0 0 .9 -.35"/>
+    </filter>
+    <clipPath id="bClip"><circle cx="100" cy="100" r="96"/></clipPath>
+  </defs>
+</svg>
+
+<nav>
+  <a href="#top" class="brand">
+    <span class="ball-art ball-mini" data-detail="low"></span>
+    KWON YE DAM
+  </a>
+  <div class="menu">
+    <a href="#about">PLAYER</a>
+    <a href="#lineup">LINEUP</a>
+  </div>
+  <div class="count">
+    <span>B <span class="dots" data-k="balls"><i></i><i></i><i></i></span></span>
+    <span>S <span class="dots" data-k="strikes"><i></i><i></i></span></span>
+    <span>O <span class="dots" data-k="outs"><i></i><i></i></span></span>
+    <b class="inn-label">1회초</b>
+  </div>
+</nav>
+
+<!-- ─────────── HERO ─────────── -->
+<header class="hero" id="top">
+  <div class="lights l"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="lights r"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div class="wrap hero-grid">
+    <div>
+      <div class="tagline">NOW BATTING</div>
+      <h1>
+        <span class="ko">권예담</span>
+      </h1>
+      <p class="lead reveal">
+        <b>긍정적</b>이고 <b>감정 기복이 거의 없는</b>, <b>다정한</b> 아이.
+      </p>
+      <div class="cta reveal">
+        <a href="#about" class="btn primary">선수 카드 보기 →</a>
+        <a href="#lineup" class="btn">라인업 보기</a>
+      </div>
+      <div class="pitch-area reveal">
+        <div class="pitch-btns">
+          <button type="button" class="btn pitch" id="pitchBtn">⚾ 공던지기</button>
+          <button type="button" class="btn swing" id="swingBtn" disabled>공 치기 <kbd>Space</kbd></button>
+        </div>
+        <div class="mini-board" aria-live="polite">
+          <div class="mb-scroll"><table id="lineScore"></table></div>
+          <div class="mb-bottom">
+            <div class="bases" id="bases" aria-label="주자"><i data-b="1"></i><i data-b="0"></i><i data-b="2"></i></div>
+            <div class="mb-count">
+              <div class="pb-row"><span>B</span><span class="dots" data-k="balls"><i></i><i></i><i></i></span></div>
+              <div class="pb-row"><span>S</span><span class="dots" data-k="strikes"><i></i><i></i></span></div>
+              <div class="pb-row"><span>O</span><span class="dots" data-k="outs"><i></i><i></i></span></div>
+            </div>
+            <div class="mb-info"><b class="inn-label">1회초</b><small id="pitchLog">공을 던져 보세요</small></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ball-stage reveal">
+      <div class="ball">
+        <div class="ball-art" data-spin data-detail="high"></div>
+      </div>
+      <div class="ball-shadow"></div>
+      <div class="speed"><small>PITCH SPEED</small><b id="kmh">148</b><span> km/h</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="stitch-line"></div>
+
+<!-- ─────────── PLAYER CARD ─────────── -->
+<section id="about">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="inning reveal">1ST INNING · 선수 소개</div>
+        <h2 class="reveal">PLAYER CARD<span class="ko">선수 카드</span></h2>
+      </div>
+    </div>
+    <div class="about-grid">
+      <div class="reveal">
+        <div class="card-flip" id="card">
+          <div class="card-inner">
+            <div class="face front">
+              <div class="photo">
+                <span class="team">ROOKIE · 2026</span>
+                <span class="num">07</span>
+                <span class="initial">Yedam</span>
+              </div>
+              <div class="plate">
+                <div><b>권예담</b><small>서울오금초 · 4학년 3반</small></div>
+              </div>
+            </div>
+            <div class="face back">
+              <h4>PLAYER PROFILE</h4>
+              <p>권예담 선수를 소개합니다</p>
+              <table class="profile">
+                <tr><th>학교</th><td>서울오금초등학교</td></tr>
+                <tr><th>학년 / 반</th><td>4학년 3반</td></tr>
+                <tr><th>나이</th><td>11살</td></tr>
+                <tr><th>장래희망</th><td>야구선수 ⚾</td></tr>
+                <tr><th>취미</th><td>야구</td></tr>
+                <tr><th>좋아하는 악기</th><td>우쿨렐레, 피아노</td></tr>
+                <tr><th>가족</th><td>엄마, 아빠, 형, 나</td></tr>
+                <tr><th>반려동물</th><td>없음</td></tr>
+              </table>
+              <div class="hint">꿈은 프로야구 선수!</div>
+            </div>
+          </div>
+        </div>
+        <div class="flip-hint">카드에 마우스를 올리면 뒷면 기록이 보여요 ↻</div>
+      </div>
+
+      <div class="scout reveal">
+        <p class="big">
+          저는 <mark>긍정적</mark>이고 감정 기복이 거의 없고, 잘하는 것도 많고 <mark>다정하고 자상합니다.</mark>
+          그리고 <mark>야구 게임</mark>을 만들었습니다.
+          계속 멋진 프로젝트를 만들겠습니다. 감사합니다.
+        </p>
+        <div class="scout-report">
+          <header>선수 분석 <span>좋아하는 과목 · 순위 / %</span></header>
+          <div class="tool"><em>1</em><span>컨택 · 체육</span><div class="bar"><i data-w="100"></i></div><b>100%</b></div>
+          <div class="tool"><em>2</em><span>파워 · 음악</span><div class="bar"><i data-w="96"></i></div><b>96%</b></div>
+          <div class="tool"><em>3</em><span>스피드 · 수학</span><div class="bar"><i data-w="87"></i></div><b>87%</b></div>
+          <div class="tool"><em>4</em><span>수비 · 과학</span><div class="bar"><i data-w="65"></i></div><b>65%</b></div>
+          <div class="tool"><em>5</em><span>송구 · 사회</span><div class="bar"><i data-w="47"></i></div><b>47%</b></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stitch-line"></div>
+
+<!-- ─────────── LINEUP (PROJECTS) ─────────── -->
+<section id="lineup" class="mow">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="inning reveal">3RD INNING · 내가 만든 프로젝트</div>
+        <h2 class="reveal">STARTING LINEUP<span class="ko">오늘의 선발 라인업</span></h2>
+      </div>
+    </div>
+    <div class="diamond-wrap">
+      <div class="ground reveal">
+      <svg class="field-svg" viewBox="0 0 500 460" aria-label="수비 위치로 본 내 프로젝트">
+        <!-- 외야 -->
+        <path d="M250 440 L20 210 A325 325 0 0 1 480 210 Z" fill="#1a6a4b" stroke="#f6f1e4" stroke-opacity=".5" stroke-width="2"/>
+        <!-- 내야 흙 -->
+        <path d="M250 440 L110 300 A200 200 0 0 1 390 300 Z" fill="#c7703b"/>
+        <!-- 내야 잔디 -->
+        <rect x="190" y="290" width="120" height="120" transform="rotate(45 250 350)" fill="#1d7553"/>
+        <!-- 베이스 라인 -->
+        <path d="M250 435 L165 350 L250 265 L335 350 Z" fill="none" stroke="#f6f1e4" stroke-width="3"/>
+        <g fill="#f6f1e4">
+          <rect x="243" y="258" width="14" height="14" transform="rotate(45 250 265)"/>
+          <rect x="158" y="343" width="14" height="14" transform="rotate(45 165 350)"/>
+          <rect x="328" y="343" width="14" height="14" transform="rotate(45 335 350)"/>
+          <path d="M243 428 h14 v7 l-7 7 l-7 -7z"/>
+        </g>
+        <circle cx="250" cy="352" r="14" fill="#a85a2c"/>
+        <!-- 포지션 -->
+        <g font-family="Bebas Neue" font-size="20" text-anchor="middle">
+          <g class="pos-dot" data-i="0"><circle cx="250" cy="352" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="250" y="359" fill="#f6f1e4">P</text></g>
+          <g class="pos-dot" data-i="1"><circle cx="250" cy="425" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="250" y="432" fill="#f6f1e4">C</text></g>
+          <g class="pos-dot" data-i="2"><circle cx="350" cy="320" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="350" y="327" fill="#f6f1e4">1B</text></g>
+          <g class="pos-dot" data-i="3"><circle cx="300" cy="262" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="300" y="269" fill="#f6f1e4">2B</text></g>
+          <g class="pos-dot" data-i="4"><circle cx="150" cy="320" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="150" y="327" fill="#f6f1e4">3B</text></g>
+          <g class="pos-dot" data-i="5"><circle cx="200" cy="262" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="200" y="269" fill="#f6f1e4">SS</text></g>
+          <g class="pos-dot" data-i="6"><circle cx="95"  cy="190" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="95"  y="197" fill="#f6f1e4">LF</text></g>
+          <g class="pos-dot" data-i="7"><circle cx="250" cy="120" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="250" y="127" fill="#f6f1e4">CF</text></g>
+          <g class="pos-dot" data-i="8"><circle cx="405" cy="190" r="20" fill="#13213b" stroke="#ffb627" stroke-width="2"/><text x="405" y="197" fill="#f6f1e4">RF</text></g>
+        </g>
+      </svg>
+        <div class="preview-box" hidden><img class="preview" alt=""></div>
+      </div>
+
+      <ol class="lineup reveal">
+        <li data-i="7" data-preview="assets/baseball-game.gif" data-preview-alt="야구게임 플레이 화면"><span class="order">1</span><span class="p">CF</span><span class="name">야구게임(가제)<small>AI나 친구와 같이 할 수 있는 만능 야구게임</small></span><span class="avg"><a class="go" href="https://moonqkim.github.io/ai-gongbang-games/baseball.html" target="_blank" rel="noopener">바로가기 ▶</a></span></li>
+        <li data-i="5"><span class="order">2</span><span class="p">SS</span><span class="name"></span><span class="avg"></span></li>
+        <li data-i="3"><span class="order">3</span><span class="p">2B</span><span class="name"></span><span class="avg"></span></li>
+        <li data-i="2"><span class="order">4</span><span class="p">1B</span><span class="name"></span><span class="avg"></span></li>
+        <li data-i="8"><span class="order">5</span><span class="p">RF</span><span class="name"></span><span class="avg"></span></li>
+        <li data-i="4"><span class="order">6</span><span class="p">3B</span><span class="name"></span><span class="avg"></span></li>
+        <li data-i="6"><span class="order">7</span><span class="p">LF</span><span class="name"></span><span class="avg"></span></li>
+        <li data-i="1"><span class="order">8</span><span class="p">C</span><span class="name"></span><span class="avg"></span></li>
+        <li data-i="0"><span class="order">9</span><span class="p">P</span><span class="name"></span><span class="avg"></span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+
+
+<script>
+  // ───────── 야구공 그리기 ─────────
+  // 계산(순수 함수): 실밥 곡선 위의 점·방향을 구해 바늘땀 모양을 만든다
+  const BALL_R = 96, BALL_C = 100;
+  const SEAMS = [
+    [[50, 22], [84, 60], [84, 140], [50, 178]],     // 왼쪽 실밥
+    [[150, 22], [116, 60], [116, 140], [150, 178]], // 오른쪽 실밥
+  ];
+
+  function bezierAt([p0, p1, p2, p3], t) {
+    const u = 1 - t;
+    const pt = (i) => u*u*u*p0[i] + 3*u*u*t*p1[i] + 3*u*t*t*p2[i] + t*t*t*p3[i];
+    const dt = (i) => 3*u*u*(p1[i]-p0[i]) + 6*u*t*(p2[i]-p1[i]) + 3*t*t*(p3[i]-p2[i]);
+    const dx = dt(0), dy = dt(1), len = Math.hypot(dx, dy) || 1;
+    return { x: pt(0), y: pt(1), tx: dx / len, ty: dy / len };
+  }
+
+  // 공 가장자리로 갈수록 작고 흐리게 (둥근 면이 기울어 보이도록)
+  function edgeFactor(x, y) {
+    const d = Math.hypot(x - BALL_C, y - BALL_C) / BALL_R;
+    return Math.max(.3, Math.sqrt(Math.max(0, 1 - d * d)));
+  }
+
+  function getStitches(curve, count) {
+    const out = [];
+    for (let i = 1; i < count; i++) {
+      const { x, y, tx, ty } = bezierAt(curve, i / count);
+      const nx = -ty, ny = tx, f = edgeFactor(x, y);
+      const a = 1.6 * f, b = 7.5 * f, back = 3.4 * f;
+      const seg = (side) =>
+        `M${(x + nx*a*side).toFixed(1)} ${(y + ny*a*side).toFixed(1)}L${(x + nx*b*side - tx*back).toFixed(1)} ${(y + ny*b*side - ty*back).toFixed(1)}`;
+      out.push({ d: seg(1) + seg(-1), w: (2.3 * f).toFixed(2), o: (.55 + .45 * f).toFixed(2) });
+    }
+    return out;
+  }
+
+  function makeBallSVG({ spin = false, detail = 'high' } = {}) {
+    const count = detail === 'low' ? 11 : 22;
+    const curvePath = (c) => `M${c[0]}C${c[1]} ${c[2]} ${c[3]}`;
+    const seams = SEAMS.map(c => {
+      const stitches = getStitches(c, count).map(s =>
+        `<path d="${s.d}" stroke="#7a1612" stroke-width="${s.w}" stroke-opacity=".35" transform="translate(.6 .9)"/>` +
+        `<path d="${s.d}" stroke="url(#bThread)" stroke-width="${s.w}" opacity="${s.o}"/>`).join('');
+      return `<path d="${curvePath(c)}" stroke="#a8916b" stroke-width="2.4" stroke-opacity=".55"/>` +
+             `<path d="${curvePath(c)}" stroke="#fffaf0" stroke-width=".8" stroke-opacity=".7" transform="translate(-.8 -.6)"/>` +
+             `<g stroke-linecap="round">${stitches}</g>`;
+    }).join('');
+    const logo = detail === 'high'
+      ? `<g fill="#13213b" text-anchor="middle" opacity=".42">
+           <text x="100" y="97" font-family="Bebas Neue" font-size="11" letter-spacing="1.4">YEDAM</text>
+           <text x="100" y="105" font-family="Bebas Neue" font-size="5" letter-spacing=".8">OFFICIAL BALL</text>
+           <text x="100" y="113" font-family="JetBrains Mono" font-size="4.6" letter-spacing=".4">★ No.07 ★</text>
+         </g>` : '';
+    return `<svg viewBox="0 0 200 200" aria-hidden="true">
+      <circle cx="100" cy="100" r="96" fill="url(#bLeather)"/>
+      <g clip-path="url(#bClip)">
+        <rect width="200" height="200" filter="url(#bGrain)" opacity="${detail === 'low' ? 0 : .5}"/>
+        <g class="${spin ? 'spin' : ''}" fill="none">${seams}${logo}</g>
+        <circle cx="100" cy="100" r="96" fill="url(#bShade)"/>
+        <circle cx="100" cy="100" r="96" fill="url(#bRim)"/>
+        <ellipse cx="70" cy="58" rx="30" ry="18" transform="rotate(-32 70 58)" fill="url(#bSpec)" opacity=".75"/>
+      </g>
+      <circle cx="100" cy="100" r="95.5" fill="none" stroke="#9c8a66" stroke-opacity=".35"/>
+    </svg>`;
+  }
+
+  const BALL_SMALL = makeBallSVG({ detail: 'low' });
+  document.querySelectorAll('.ball-art').forEach(el => {
+    el.innerHTML = makeBallSVG({ spin: el.hasAttribute('data-spin'), detail: el.dataset.detail });
+  });
+
+  // 스크롤 등장 + 스카우팅 막대
+  const io = new IntersectionObserver((es) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    e.target.querySelectorAll('.bar i').forEach(b => b.style.width = b.dataset.w + '%');
+    io.unobserve(e.target);
+  }), { threshold: .15 });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // 메뉴: 지금 보는 섹션 표시
+  const links = [...document.querySelectorAll('nav .menu a')];
+  const navIO = new IntersectionObserver((es) => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    links.forEach(l => l.classList.toggle('active', l.hash === '#' + e.target.id));
+  }), { rootMargin: '-45% 0px -50% 0px' });
+  document.querySelectorAll('section[id], header[id]').forEach(s => navIO.observe(s));
+
+  // ───────── 공던지기 + 공 치기 ─────────
+  // 계산(순수 함수): 난수·시각은 인자로 받는다
+  const LABEL = { ball: '볼', strike: '스트라이크', swingMiss: '헛스윙', foul: '파울', hit: '안타', homerun: '홈런' };
+
+  function getSpeed(r) { return 128 + Math.floor(r * 30); }                  // 128~157km/h
+  function getFlightMs(speed) { return 1500 - (speed - 128) * 20; }          // 빠를수록 짧게 (1500~920ms)
+  function isInZone(r) { return r < .55; }                                   // 55%는 스트라이크 존
+  function getInningLabel(inning, half) { return `${inning}회${half === 'top' ? '초' : '말'}`; }
+
+  // 안 쳤을 때
+  function judgeTake(inZone) { return inZone ? 'strike' : 'ball'; }
+
+  // 쳤을 때: 공이 도착한 순간과 얼마나 차이 나는지(ms)로 판정
+  function judgeSwing(diffMs, inZone) {
+    const gap = Math.abs(diffMs);
+    if (inZone) {
+      if (gap <= 50) return 'homerun';
+      if (gap <= 120) return 'hit';
+      if (gap <= 200) return 'foul';
+      return 'swingMiss';
+    }
+    return gap <= 120 ? 'foul' : 'swingMiss';                                  // 존 밖 공은 맞혀도 파울
+  }
+
+  // 주자 진루: bases = [1루, 2루, 3루]
+  function advanceRunners(bases, kind) {
+    const [b1, b2, b3] = bases;
+    if (kind === 'walk') {   // 밀려서만 진루
+      return { bases: [true, b1 || b2, b3 || (b1 && b2)], runs: b1 && b2 && b3 ? 1 : 0 };
+    }
+    if (kind === 'hit') {    // 모든 주자 한 베이스씩
+      return { bases: [true, b1, b2], runs: b3 ? 1 : 0 };
+    }
+    // homerun: 주자 + 타자 모두 득점
+    return { bases: [false, false, false], runs: 1 + bases.filter(Boolean).length };
+  }
+
+  const HR_NAME = { 1: '솔로 홈런', 2: '투런 홈런', 3: '쓰리런 홈런', 4: '만루 홈런' };
+
+  function newGame() {
+    return { balls: 0, strikes: 0, outs: 0, inning: 1, half: 'top',
+             bases: [false, false, false], line: { top: [0], bottom: [] }, hits: { top: 0, bottom: 0 } };
+  }
+
+  // 투구 결과를 반영한 다음 상태와 화면에 띄울 판정을 돌려준다
+  function applyPitch(state, kind) {
+    const s = structuredClone(state);
+    const resetCount = () => { s.balls = 0; s.strikes = 0; };
+    let call = LABEL[kind], big = false, runs = 0;
+    const move = (k) => { const r = advanceRunners(s.bases, k); s.bases = r.bases; runs = r.runs; };
+
+    if (kind === 'ball') {
+      s.balls += 1;
+      if (s.balls === 4) { resetCount(); move('walk'); call = runs ? '밀어내기 볼넷' : '볼넷'; big = true; }
+    } else if (kind === 'strike' || kind === 'swingMiss') {
+      s.strikes += 1;
+      if (s.strikes === 3) { resetCount(); s.outs += 1; call = '삼진'; big = true; }
+    } else if (kind === 'foul') {
+      if (s.strikes < 2) s.strikes += 1;   // 투 스트라이크에서는 파울이 카운트되지 않는다
+    } else {
+      resetCount();
+      move(kind);
+      s.hits[s.half] += 1;
+      if (kind === 'homerun') { call = HR_NAME[runs]; big = true; }
+    }
+
+    if (runs) s.line[s.half][s.inning - 1] = (s.line[s.half][s.inning - 1] ?? 0) + runs;
+
+    let change = false;
+    if (s.outs === 3) {
+      change = true;
+      s.outs = 0;
+      s.bases = [false, false, false];
+      if (s.half === 'top') s.half = 'bottom'; else { s.half = 'top'; s.inning += 1; }
+      s.line[s.half][s.inning - 1] ??= 0;
+    }
+    return { state: s, call, sub: runs ? `${runs}점!` : '', big, change, runs };
+  }
+
+  function getTotal(runsByInning) { return runsByInning.reduce((a, r) => a + (r ?? 0), 0); }
+
+  // 화면(부작용)
+  const pitchBtn = document.getElementById('pitchBtn');
+  const swingBtn = document.getElementById('swingBtn');
+  const pitchLog = document.getElementById('pitchLog');
+  const kmh = document.getElementById('kmh');
+  let game = newGame();
+  const lineScore = document.getElementById('lineScore');
+  let flight = null;   // 날아오는 중인 공 정보
+
+  function render(state) {
+    document.querySelectorAll('.dots[data-k]').forEach(d => {
+      [...d.children].forEach((dot, i) => dot.classList.toggle('on', i < state[d.dataset.k]));
+    });
+    document.querySelectorAll('.inn-label').forEach(el => el.textContent = getInningLabel(state.inning, state.half));
+    document.querySelectorAll('#bases i').forEach(b => b.classList.toggle('on', state.bases[b.dataset.b]));
+    renderLineScore(state, null);
+  }
+
+  function renderLineScore(state, popHalf) {
+    const cols = Math.max(9, state.inning);
+    const head = '<tr><th></th>' + Array.from({ length: cols }, (_, i) => `<th>${i + 1}</th>`).join('')
+      + '<th class="tot sep">R</th><th class="tot">H</th></tr>';
+    const row = (half, name) => {
+      const cells = Array.from({ length: cols }, (_, i) => {
+        const v = state.line[half][i];
+        const now = state.inning === i + 1 && state.half === half;
+        const cls = [v === undefined ? 'empty' : '', now ? 'now' : '', now && popHalf === half ? 'pop' : ''].join(' ').trim();
+        return `<td class="${cls}">${v ?? '-'}</td>`;
+      }).join('');
+      return `<tr><td class="team">${name}</td>${cells}<td class="tot sep">${getTotal(state.line[half])}</td><td class="tot">${state.hits[half]}</td></tr>`;
+    };
+    lineScore.innerHTML = head + row('top', 'A팀') + row('bottom', 'B팀');
+  }
+
+  function showCall(text, sub, big) {
+    const el = document.createElement('div');
+    el.className = 'call show' + (big ? ' big' : '');
+    el.innerHTML = text + (sub ? `<small>${sub}</small>` : '');
+    document.body.appendChild(el);
+    return new Promise(res => el.addEventListener('animationend', () => { el.remove(); res(); }, { once: true }));
+  }
+
+  const at = (x, y, sc, deg = 0) => `translate(${x}px, ${y}px) scale(${sc}) rotate(${deg}deg)`;
+
+  // 공을 던지고, 치거나 지나갈 때까지 기다렸다가 결과 종류를 돌려준다
+  function throwBall(durMs, inZone) {
+    const r = swingBtn.getBoundingClientRect();
+    const tx = r.left + r.width / 2 + (inZone ? 0 : (Math.random() < .5 ? -1 : 1) * (r.width / 2 + 40));
+    const ty = r.top + r.height / 2;
+    const sx = r.left + r.width / 2;
+
+    const ring = document.createElement('div');
+    ring.className = 'timing-ring';
+    ring.style.transform = at(tx, ty, 3);
+    const ball = document.createElement('div');
+    ball.className = 'flying-ball';
+    ball.innerHTML = BALL_SMALL;
+    document.body.append(ring, ball);
+
+    return new Promise((resolve) => {
+      const drop = ball.animate([
+        { transform: at(sx, -60, .3, 0) },
+        { transform: at(tx, ty, 1.15, 900) },
+      ], { duration: durMs, easing: 'cubic-bezier(.5,0,.85,.65)', fill: 'forwards' });
+      ring.animate([
+        { transform: at(tx, ty, 3), opacity: .2 },
+        { transform: at(tx, ty, 1.15), opacity: 1 },
+      ], { duration: durMs, easing: 'linear', fill: 'forwards' });
+
+      flight = { arriveAt: performance.now() + durMs, inZone, ball, ring, resolve, anims: [drop], outcome: null };
+      swingBtn.disabled = false;
+
+      // 도착 후 그대로 지나간다
+      drop.finished.then(() => {
+        if (!flight || flight.ball !== ball || flight.contact) return;
+        const pass = ball.animate([
+          { transform: at(tx, ty, 1.15, 900), opacity: 1 },
+          { transform: at(tx, ty + 150, 1.4, 1000), opacity: 0 },
+        ], { duration: 260, easing: 'linear', fill: 'forwards' });
+        flight.anims.push(pass);
+        return pass.finished;
+      }).then(() => {
+        if (!flight || flight.ball !== ball || flight.contact) return;
+        finish(flight.outcome ?? judgeTake(inZone));
+      }).catch(() => {});   // 쳐서 애니메이션을 취소하면 여기로 온다
+    });
+  }
+
+  function finish(kind) {
+    const f = flight;
+    flight = null;
+    swingBtn.disabled = true;
+    f.ring.remove();
+    f.ball.remove();
+    f.resolve(kind);
+  }
+
+  function onSwing() {
+    if (!flight || flight.outcome) return;
+    swingBtn.classList.remove('swung'); void swingBtn.offsetWidth; swingBtn.classList.add('swung');
+    const kind = judgeSwing(performance.now() - flight.arriveAt, flight.inZone);
+    flight.outcome = kind;
+    swingBtn.disabled = true;
+    if (kind === 'swingMiss') return;           // 헛스윙: 공은 그대로 지나간다
+
+    // 맞았다: 지금 자리에서 튕겨 나간다
+    flight.contact = true;
+    const { ball, ring } = flight;
+    const b = ball.getBoundingClientRect();
+    const cx = b.left + b.width / 2, cy = b.top + b.height / 2, sc = b.width / 46;
+    flight.anims.forEach(a => a.cancel());
+    ring.remove();
+    const to = {
+      homerun: [innerWidth * .85, -220, .1, 1100],
+      hit:     [cx < innerWidth / 2 ? innerWidth * .75 : innerWidth * .2, cy - 320, .4, 650],
+      foul:    [cx < innerWidth / 2 ? -120 : innerWidth + 120, cy - 120, .7, 520],
+    }[kind];
+    ball.animate([
+      { transform: at(cx, cy, sc, 900) },
+      { transform: at(to[0], to[1], to[2], 1600) },
+    ], { duration: to[3], easing: 'cubic-bezier(.15,.7,.3,1)', fill: 'forwards' })
+      .finished.then(() => finish(kind));
+  }
+
+  async function onPitch() {
+    if (flight) return;
+    pitchBtn.disabled = true;
+    const speed = getSpeed(Math.random());
+    kmh.textContent = speed;
+    pitchLog.textContent = '공이 날아와요! 노란 원이 줄어들 때 치세요';
+
+    const kind = await throwBall(getFlightMs(speed), isInZone(Math.random()));
+    const result = applyPitch(game, kind);
+    const scoredHalf = game.half;
+    game = result.state;
+    render(game);
+    if (result.runs) renderLineScore(game, scoredHalf);   // 득점한 칸 반짝 (득점과 쓰리아웃은 같은 공에서 안 나옴)
+    pitchLog.textContent = `방금 공: ${LABEL[kind]} · ${speed}km/h`;
+    await showCall(result.call, result.change ? '쓰리아웃!' : result.sub, result.big);
+    if (result.change) await showCall('공수교대', getInningLabel(game.inning, game.half), true);
+    pitchBtn.disabled = false;
+  }
+
+  pitchBtn.addEventListener('click', onPitch);
+  swingBtn.addEventListener('click', onSwing);
+  addEventListener('keydown', (e) => {
+    if (e.code !== 'Space' || !flight) return;
+    e.preventDefault();
+    onSwing();
+  });
+  render(game);
+
+  // 선수 카드: 터치 기기에서는 탭으로 뒤집기
+  const card = document.getElementById('card');
+  card.addEventListener('click', () => card.classList.toggle('flipped'));
+
+  // 라인업 ↔ 수비 위치 연동
+  const dots = [...document.querySelectorAll('.pos-dot')];
+  const rows = [...document.querySelectorAll('.lineup li')];
+  const highlight = (i) => {
+    dots.forEach(d => d.classList.toggle('on', d.dataset.i === i));
+    rows.forEach(r => r.classList.toggle('on', r.dataset.i === i));
+  };
+  [...dots, ...rows].forEach(el => {
+    el.addEventListener('pointerenter', () => highlight(el.dataset.i));
+    el.addEventListener('pointerleave', () => highlight(null));
+  });
+
+  // 프로젝트 줄에 마우스를 올리면 그라운드 자리에 게임 화면을 띄운다
+  const previewBox = document.querySelector('.ground .preview-box');
+  const preview = previewBox.querySelector('.preview');
+  rows.filter(r => r.dataset.preview).forEach(r => {
+    r.addEventListener('pointerenter', () => {
+      preview.src = r.dataset.preview;
+      preview.alt = r.dataset.previewAlt;
+      previewBox.hidden = false;
+    });
+    r.addEventListener('pointerleave', () => { previewBox.hidden = true; });
+  });
+
+</script>
+</body>
+</html>
