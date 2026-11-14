@@ -295,6 +295,18 @@
     position: absolute; width: 153%; max-width: none; left: -28.5%;
     top: 50%; transform: translateY(-40.9%);
   }
+  /* 그라운드 위 작은 썸네일: 포지션 동그라미 바로 위에 띄운다. 자르기 비율은 큰 미리보기와 같다 */
+  .ground .thumb {
+    position: absolute; width: 20%; aspect-ratio: 562 / 490; overflow: hidden;
+    transform: translate(-50%, -100%); border-radius: 8px;
+    border: 2px solid var(--led); background: var(--field); box-shadow: 0 6px 16px rgba(0,0,0,.4);
+    transition: transform .2s;
+  }
+  .ground .thumb:hover, .ground .thumb.on { transform: translate(-50%, -100%) scale(1.08); }
+  .ground .thumb img {
+    position: absolute; width: 153%; max-width: none; left: -28.5%;
+    top: 50%; transform: translateY(-40.9%);
+  }
   .lineup .go {
     display: inline-block; padding: 8px 14px; border-radius: 999px;
     background: var(--led); color: var(--navy); font-weight: 700; font-size: 14px;
@@ -878,6 +890,7 @@
   const highlight = (i) => {
     dots.forEach(d => d.classList.toggle('on', d.dataset.i === i));
     rows.forEach(r => r.classList.toggle('on', r.dataset.i === i));
+    document.querySelectorAll('.ground .thumb').forEach(t => t.classList.toggle('on', t.dataset.i === i));
   };
   [...dots, ...rows].forEach(el => {
     el.addEventListener('pointerenter', () => highlight(el.dataset.i));
@@ -894,6 +907,30 @@
       previewBox.hidden = false;
     });
     r.addEventListener('pointerleave', () => { previewBox.hidden = true; });
+  });
+
+  // 계산(순수 함수): SVG 좌표(viewBox 500×460)를 그라운드 칸 안의 % 위치로 바꾼다.
+  // 동그라미(반지름 20) 위로 8만큼 띄운 지점이 썸네일 아래 가운데가 된다
+  const FIELD_W = 500, FIELD_H = 460, DOT_R = 20, THUMB_GAP = 8;
+  function getThumbPosition(cx, cy) {
+    return { left: `${cx / FIELD_W * 100}%`, top: `${(cy - DOT_R - THUMB_GAP) / FIELD_H * 100}%` };
+  }
+
+  // 미리보기가 있는 프로젝트마다 자기 포지션 위에 작은 썸네일을 붙인다. 누르면 게임이 열린다
+  const ground = document.querySelector('.ground');
+  rows.filter(r => r.dataset.preview).forEach(r => {
+    const circle = dots.find(d => d.dataset.i === r.dataset.i).querySelector('circle');
+    const pos = getThumbPosition(+circle.getAttribute('cx'), +circle.getAttribute('cy'));
+    const link = r.querySelector('.go');
+    const thumb = document.createElement('a');
+    thumb.className = 'thumb';
+    thumb.dataset.i = r.dataset.i;
+    thumb.href = link.href; thumb.target = '_blank'; thumb.rel = 'noopener';
+    thumb.style.left = pos.left; thumb.style.top = pos.top;
+    thumb.innerHTML = `<img src="${r.dataset.preview}" alt="${r.dataset.previewAlt}">`;
+    thumb.addEventListener('pointerenter', () => highlight(r.dataset.i));
+    thumb.addEventListener('pointerleave', () => highlight(null));
+    ground.insertBefore(thumb, previewBox);
   });
 
 </script>
